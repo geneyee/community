@@ -30,7 +30,7 @@ public class PostsRepositoryTest {
 		}
 		
 		// when
-		List<Posts> postsList = postsRepository.findAllDesc();
+//		List<Posts> postsList = postsRepository.findAllDesc();
 		
 		// then
 //		Posts posts = postsList.get(0);

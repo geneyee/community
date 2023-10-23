@@ -3,6 +3,9 @@ package com.dev.community.service.posts;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dev.community.domain.posts.Posts;
@@ -20,11 +23,15 @@ public class PostsService {
 	
 	private final PostsRepository postsRepository;
 
-	public List<Posts> findAllDesc() {
-		// TODO 전체 리스트를 조회한다.
-		List<Posts> postsList = this.postsRepository.findAllDesc();
+	public Page<Posts> findAllDesc(int page) {
 		
-		return postsList;
+		Pageable pageable = PageRequest.of(page, 10);
+		return this.postsRepository.findAllDesc(pageable);
+		
+		// TODO 전체 리스트를 조회한다.
+//		List<Posts> postsList = this.postsRepository.findAllDesc();
+//		
+//		return postsList;
 	}
 
 	public Integer save(PostCreateRequestDTO createRequestDTO) {

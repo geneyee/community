@@ -1,7 +1,7 @@
 package com.dev.community.domain.posts;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,6 +15,6 @@ public interface PostsRepository extends JpaRepository<Posts, Integer> {
 
 	// 전체 리스트(id DESC)
 	@Query("SELECT p FROM Posts p ORDER BY p.id DESC")
-	List<Posts> findAllDesc();
+	Page<Posts> findAllDesc(Pageable pageable);
 
 }

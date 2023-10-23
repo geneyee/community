@@ -2,6 +2,7 @@ package com.dev.community.web.controller.posts;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.service.posts.PostsService;
@@ -27,11 +29,11 @@ public class PostsController {
 	private final PostsService postsService;
 	
 	// 전체 조회 화면(index 화면)
-	@GetMapping("/")
-	public String index(Model model) {
+	@GetMapping("/list")
+	public String index(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
 		
-		List<Posts> postsList = this.postsService.findAllDesc();
-		model.addAttribute("postsList", postsList);
+		Page<Posts> paging = this.postsService.findAllDesc(page);
+		model.addAttribute("paging", paging);
 		
 		return "post/index";
 	}
