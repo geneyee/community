@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+	<!-- Common CSS -->
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+	<title>My커뮤니티</title>
+</head>
+
+<body>
+	<!--Header 영역-->
+	<header th:replace="/common/fragments/header :: HeaderFragment"></header>
+	<!-- 네비게이션바 -->
+	<nav th:replace="/common/fragments/navbar :: navbarFragment"></nav>
+	<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+	<th:block layout:fragment="content"></th:block>
+	<!-- 기본 템플릿 안에 삽입될 내용 End -->
+	<!-- Bootstrap JS -->
+	<script th:src="@{/bootstrap.min.js}"></script>
+	<!-- 자바스크립트 Start -->
+	<th:block layout:fragment="script"></th:block>
+	<!-- 자바스크립트 End -->
+	<!--Footer 영역-->
+	<footer th:replace="/common/fragments/footer :: footerFragment"></footer>
+</body>
+
+</html>
