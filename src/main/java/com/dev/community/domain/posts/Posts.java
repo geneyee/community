@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.dev.community.domain.comment.Comment;
+import com.dev.community.domain.user.Users;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,6 +15,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,6 +48,9 @@ public class Posts {
 	@OneToMany(mappedBy = "posts", cascade = CascadeType.REMOVE)
 	@Builder.Default
 	private List<Comment> commentList = new ArrayList<>();
+	
+	@ManyToOne
+	private Users author; // 글쓴이
 	
 
 	@Override

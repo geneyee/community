@@ -1,6 +1,7 @@
 package com.dev.community.domain.comment;
 
 import com.dev.community.domain.posts.Posts;
+import com.dev.community.domain.user.Users;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,6 +34,9 @@ public class Comment {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "posts_id")
 	private Posts posts;
+	
+	@ManyToOne
+	private Users author;
 
 	@Override
 	public String toString() {
