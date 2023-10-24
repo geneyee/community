@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.posts.Posts;
+import com.dev.community.domain.user.Users;
 import com.dev.community.web.dto.comment.response.CommentResponseDTO;
 
 import lombok.Getter;
@@ -28,6 +29,9 @@ public class PostsResponseDTO {
 	// 댓글 추가
 	private List<CommentResponseDTO> commentList = new ArrayList<>();
 	
+	// 작성자 추가
+	private Users author;
+	
 	// entity -> dto
 	public PostsResponseDTO(Posts entity) {
 		this.id = entity.getId();
@@ -38,6 +42,8 @@ public class PostsResponseDTO {
 		this.commentList = entity.getCommentList().stream()
 				.map(comment -> CommentResponseDTO.CommentFactory(comment))
 				.collect(Collectors.toList());
+		// 작성자
+		this.author = entity.getAuthor();
 			
 	}
 	

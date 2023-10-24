@@ -1,5 +1,7 @@
 package com.dev.community.web.controller.comment;
 
+import java.security.Principal;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dev.community.domain.user.Users;
 import com.dev.community.service.comment.CommentService;
+import com.dev.community.service.user.UserService;
 import com.dev.community.web.dto.comment.request.CommentCreateRequestDTO;
 import com.dev.community.web.dto.posts.response.PostsResponseDTO;
 
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class CommentController {
 	
 	private final CommentService commentService;
+	private final UserService userService;
 	
 	// 댓글 저장
 //	@PostMapping("/create/{id}") // id-post_id
@@ -33,7 +38,8 @@ public class CommentController {
 //	}
 	
 	@PostMapping("/create/{id}") // id-post_id
-	public String save(@PathVariable Integer id, Model model, PostsResponseDTO responseDTO, @Validated CommentCreateRequestDTO createRequestDTO, BindingResult bindingResult, RedirectAttributes rttr) {
+	public String save(@PathVariable Integer id, Model model, PostsResponseDTO responseDTO, @Validated CommentCreateRequestDTO createRequestDTO, BindingResult bindingResult, 
+						RedirectAttributes rttr, Principal principal) {
 		
 		if(bindingResult.hasErrors()) {
 			
@@ -46,8 +52,8 @@ public class CommentController {
 			return String.format("redirect:/posts/%s", responseDTO.getId()); //id  
 			
 		}
-		
-		CommentCreateRequestDTO requestDTO = this.commentService.save(id, createRequestDTO);
+		Users user = this.userService.getUser(principal.getName());
+		CommentCreateRequestDTO requestDTO = this.commentService.save(id, createRequestDTO, user);
 		
 		return String.format("redirect:/posts/%s", requestDTO.getPostsId());
 	}

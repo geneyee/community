@@ -1,6 +1,11 @@
 package com.dev.community.web.dto.comment.request;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+
 import com.dev.community.domain.comment.Comment;
+import com.dev.community.domain.user.Users;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -14,15 +19,19 @@ public class CommentCreateRequestDTO {
 	
 	private Integer id;
 	private Integer postsId;
+	private Users author;
+	private LocalDateTime createdDate;
 	
 	@NotEmpty(message = "내용은 필수항목입니다.")
 	private String content;
 	
-	// entity -> dto
+	// entity to dto
 	public CommentCreateRequestDTO(Comment entity) {
 		this.id = entity.getId();
 		this.postsId = entity.getPosts().getId();
 		this.content = entity.getContent();
+		this.author = entity.getAuthor();
+		this.createdDate = entity.getCreatedDate();
 	}
 	
 	public static CommentCreateRequestDTO CommentFactory(Comment entity) {

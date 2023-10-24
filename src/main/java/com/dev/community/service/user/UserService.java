@@ -1,10 +1,14 @@
 package com.dev.community.service.user;
 
+import java.util.Optional;
+
+import org.springframework.boot.context.config.ConfigDataLocationNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dev.community.domain.user.UserRepository;
 import com.dev.community.domain.user.Users;
+import com.dev.community.exception.DataNotFoundException;
 import com.dev.community.web.dto.user.UserCreateDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +43,17 @@ public class UserService {
 				.email(userCreateDTO.getEmail())
 				.build();
 		this.userRepository.save(user);
+	}
+	
+	public Users getUser(String username) {
+		// TODO user 정보 조회
+		Optional<Users> user = this.userRepository.findByUsername(username);
+		
+		if(user.isPresent()) {
+			return user.get();
+		} else {
+			throw new DataNotFoundException("User not found");
+		}
 	}
 
 }

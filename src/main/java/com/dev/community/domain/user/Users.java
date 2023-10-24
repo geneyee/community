@@ -1,5 +1,6 @@
 package com.dev.community.domain.user;
 
+import groovy.transform.ToString;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@ToString
 @NoArgsConstructor
 @Getter
 @Entity

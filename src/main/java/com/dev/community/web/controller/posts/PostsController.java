@@ -1,8 +1,9 @@
 package com.dev.community.web.controller.posts;
 
-import java.util.List;
+import java.security.Principal;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,20 +14,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dev.community.domain.posts.Posts;
+import com.dev.community.domain.user.Users;
 import com.dev.community.service.posts.PostsService;
+import com.dev.community.service.user.UserService;
 import com.dev.community.web.dto.comment.request.CommentCreateRequestDTO;
 import com.dev.community.web.dto.posts.request.PostCreateRequestDTO;
 import com.dev.community.web.dto.posts.response.PostsResponseDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 @Controller
 public class PostsController {
 	
 	private final PostsService postsService;
+	private final UserService userService;
 	
 	// 전체 조회 화면(index 화면)
 	@GetMapping("/list")
@@ -39,6 +45,7 @@ public class PostsController {
 	}
 	
 	// 글쓰기 화면
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/create")
 	public String create(Model model) {
 		
@@ -48,16 +55,21 @@ public class PostsController {
 	}
 	
 	// 글쓰기 기능
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create")
-	public String save(@Valid PostCreateRequestDTO createRequestDTO, BindingResult bindingResult) {
+	public String save(@Valid PostCreateRequestDTO createRequestDTO, BindingResult bindingResult,
+			Principal principal) {
 		
 		if(bindingResult.hasErrors()) {
 			return "post/posts_form";
 		}
+		Users user = this.userService.getUser(principal.getName());
+		Integer id = this.postsService.save(createRequestDTO, user);
+
+		log.info("principal.getName() => {}", principal.getName());
+		log.info("user => ", user.toString());
 		
-		Integer id = this.postsService.save(createRequestDTO);
-		
-		return "redirect:/posts/";
+		return "redirect:/posts/list";
 	}
 	
 	// 글 1개 조회 화면 // 댓글 추가

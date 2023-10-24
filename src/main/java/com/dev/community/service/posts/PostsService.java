@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.posts.PostsRepository;
+import com.dev.community.domain.user.Users;
 import com.dev.community.web.dto.posts.request.PostCreateRequestDTO;
 import com.dev.community.web.dto.posts.response.PostsResponseDTO;
 
@@ -34,17 +35,23 @@ public class PostsService {
 //		return postsList;
 	}
 
-	public Integer save(PostCreateRequestDTO createRequestDTO) {
+	public Integer save(PostCreateRequestDTO createRequestDTO, Users user) {
 		// TODO 글을 저장한다.
 		
-		log.info("{} : {}", this.getClass().getName(), createRequestDTO.toString());
+		log.info("controller에서 넘어온 값 : {}", createRequestDTO.toString());
+		log.info("controller에서 넘어온 값 : {}", user.getUsername());
+		
+		// service에서 찾은 username 넘겨준다.
+		createRequestDTO.setAuthor(user);
+		log.info("createRequestDTO.setAuthor(user) : {}", createRequestDTO.toString());
 		
 		// dto to entity
 		Posts posts = createRequestDTO.toEntity();
+		log.info("dto to entity : {}", posts.toString());
 		
 		// entity DB에 저장
 		 Posts saved = this.postsRepository.save(posts);
-		 log.info("{} : {}", this.getClass().getName(), saved.toString());
+		 log.info("entity DB에 저장 : {}", saved.toString());
 		
 		return saved.getId();
 	}

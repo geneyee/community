@@ -12,9 +12,11 @@ import com.dev.community.domain.user.Users;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
@@ -49,14 +51,17 @@ public class Posts {
 	@Builder.Default
 	private List<Comment> commentList = new ArrayList<>();
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "author_id")
 	private Users author; // 글쓴이
-	
 
 	@Override
 	public String toString() {
-		return "Posts [id=" + id + ", title=" + title + ", content=" + content + ", createdDate=" + createdDate + "]";
+		return "Posts [id=" + id + ", title=" + title + ", content=" + content + ", createdDate=" + createdDate
+				+ ", author=" + author + "]";
 	}
+	
+
 
 	
 }
