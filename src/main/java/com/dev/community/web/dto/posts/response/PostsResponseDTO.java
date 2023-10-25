@@ -28,6 +28,7 @@ public class PostsResponseDTO {
 	
 	// 댓글 추가
 	private List<CommentResponseDTO> commentList = new ArrayList<>();
+
 	
 	// 작성자 추가
 	private Users author;
@@ -50,6 +51,14 @@ public class PostsResponseDTO {
 	public static PostsResponseDTO PostsFactory(Posts entity) {
 		PostsResponseDTO postsResponseDTO = new PostsResponseDTO(entity);
 		return postsResponseDTO;
+	}
+
+	public Posts toEntity() {
+		// TODO dto to entity
+		return Posts.builder()
+				.id(id)
+				.author(author)
+				.build();
 	}
 	
 

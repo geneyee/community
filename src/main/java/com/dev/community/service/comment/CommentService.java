@@ -2,7 +2,9 @@ package com.dev.community.service.comment;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.dev.community.domain.comment.Comment;
@@ -11,8 +13,11 @@ import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.posts.PostsRepository;
 import com.dev.community.domain.user.UserRepository;
 import com.dev.community.domain.user.Users;
+import com.dev.community.exception.DataNotFoundException;
 import com.dev.community.service.user.UserService;
 import com.dev.community.web.dto.comment.request.CommentCreateRequestDTO;
+import com.dev.community.web.dto.comment.request.CommentUpdateRequestDTO;
+import com.dev.community.web.dto.comment.response.CommentResponseDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class CommentService {
-	
+
 	private final PostsRepository postsRepository;
 	private final CommentRepository commentRepository;
-	
-	
-	
+
 	public CommentCreateRequestDTO save(Integer id, CommentCreateRequestDTO createRequestDTO, Users user)
 			throws NoSuchElementException {
 		log.info("comment controller to service id => {}", id);
@@ -35,46 +38,91 @@ public class CommentService {
 		// TODO 댓글을 저장한다.
 		// 넘어온 id로 댓글 저장할 글 조회
 		Posts posts = this.postsRepository.findById(id).orElseThrow();
-		
-		
-		Comment comment = Comment.builder()
-				.posts(posts)
-				.content(createRequestDTO.getContent())
-				.author(user)
-				.createdDate(LocalDateTime.now())
-				.build();
-		
+
+		Comment comment = Comment.builder().posts(posts).content(createRequestDTO.getContent()).author(user)
+				.createdDate(LocalDateTime.now()).build();
+
 		log.info("user가 어떻게 저장되는지 확인 => {}", comment.toString());
-		
+
 		Comment entity = this.commentRepository.save(comment);
 
 		// entity to dto
 		CommentCreateRequestDTO requestDTO = CommentCreateRequestDTO.CommentFactory(entity);
-		
+
 		return requestDTO;
 
 	}
 
-	/*
-	public CommentCreateRequestDTO save(Integer id, String content) throws NoSuchElementException {
-		// TODO 댓글을 저장한다.
+	public CommentResponseDTO findById(Integer id) {
+		// TODO 댓글 id로 댓글 데이터 조회
+		Optional<Comment> entity = this.commentRepository.findById(id);
+
+		if (entity.isPresent()) {
+			// entity to dto
+			return CommentResponseDTO.CommentFactory(entity.get());
+		} else {
+			throw new DataNotFoundException("commet not found");
+		}
+	}
+
+//	public CommentUpdateRequestDTO modify(CommentUpdateRequestDTO commentRequestDTO) {
+//		// TODO 업데이트 한다.
+////		log.info("{}", responseDTO.getId());
+//		log.info("{}", commentRequestDTO.getId());
+//
+//		// 업데이트 dto (toForm() method 재사용)
+//		commentRequestDTO = commentRequestDTO.toForm(commentRequestDTO.getContent());
+//
+//		// dto to entity
+//		Comment entity = commentRequestDTO.toEntity();
+//
+//		// update
+//		Comment updated = this.commentRepository.save(entity);
+//
+//		// entity to dto
+//		return CommentUpdateRequestDTO.CommentFactory(updated);
+//	}
+
+	public CommentUpdateRequestDTO update(Integer id, CommentUpdateRequestDTO commentRequestDTO) {
 		
-		// 넘어온 id로 댓글 저장할 글 조회
-		Posts posts = this.postsRepository.findById(id).orElseThrow();
+		// id로 업데이트 할 댓글 찾음
+		Comment entity = this.commentRepository.findById(id).orElseThrow();
 		
-		// 댓글 저장
-		Comment comment = Comment.builder()
-				.posts(posts)
-				.content(content)
-				.build();
+		// 찾은 댓글 entity에 수정된 글 update
+		entity.update(commentRequestDTO.getContent());
 		
-		Comment entity = this.commentRepository.save(comment);
-		
+		// 저장
+		Comment updated = this.commentRepository.save(entity);
+		log.info("entity 확인 => {}",entity.toString());
+
 		// entity to dto
-		CommentCreateRequestDTO requestDTO = CommentCreateRequestDTO.CommentFactory(entity);
-		return requestDTO;
-	}*/
-	
-	
+		return CommentUpdateRequestDTO.CommentFactory(updated);
+	}
+
+	public void delete(CommentResponseDTO responseDTO) {
+		log.info("id => {}", responseDTO.getId());
+		// TODO 삭제하기
+		// dto to entity
+		Comment entity = responseDTO.toEntity();
+		
+		// delete
+		this.commentRepository.delete(entity);
+	}
+
+	/*
+	 * public CommentCreateRequestDTO save(Integer id, String content) throws
+	 * NoSuchElementException { // TODO 댓글을 저장한다.
+	 * 
+	 * // 넘어온 id로 댓글 저장할 글 조회 Posts posts =
+	 * this.postsRepository.findById(id).orElseThrow();
+	 * 
+	 * // 댓글 저장 Comment comment = Comment.builder() .posts(posts) .content(content)
+	 * .build();
+	 * 
+	 * Comment entity = this.commentRepository.save(comment);
+	 * 
+	 * // entity to dto CommentCreateRequestDTO requestDTO =
+	 * CommentCreateRequestDTO.CommentFactory(entity); return requestDTO; }
+	 */
 
 }

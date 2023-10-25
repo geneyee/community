@@ -1,7 +1,7 @@
 <html layout:decorate="~{common/layout/layout}">
 <div layout:fragment="content" class="container my-3">
 	<!--게시글-->
-	<form th:action="@{|/posts/{responseDTO.id}}">
+	<form th:action="@{|/posts/{responseDTO.id}|}">
 		<h4 class="border-bottom py-2" th:text="${responseDTO.title}"></h4>
 		<div class="card my-3">
 			<div class="card-body">
@@ -13,10 +13,22 @@
 					<div th:text="${#temporals.format(responseDTO.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
 				</div>
 			</div>
+			<div class="my-3">
+				<!-- 수정 -->
+				<a th:href="@{|/posts/modify/${responseDTO.id}|}" class="btn btn-sm btn-outline-secondary"
+					sec:authorize="isAuthenticated()"
+					th:if="${responseDTO.author != null and #authentication.getPrincipal().getUsername() == responseDTO.author.username}"
+					th:text="수정"></a>
+				<!-- 삭제 -->
+				<a href="javascript:void(0);" th:data-uri="@{|/posts/delete/${responseDTO.id}|}"
+					class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+					th:if="${responseDTO.author != null and #authentication.getPrincipal().getUsername() == responseDTO.author.username}"
+					th:text="삭제"></a>
+			</div>
 		</div>
 	</form>
 	<!--댓글 표시-->
-	<h5 th:text="|${#lists.size(responseDTO.commentList)}개의 답변이 있습니다.|"></h5>
+	<h5 th:text="|${#lists.size(responseDTO.commentList)}개의 댓글이 있습니다.|"></h5>
 	<div class="card my-3" th:each="comment : ${responseDTO.commentList}">
 		<div class="card-body">
 			<div class="card-text" style="white-space: pre-line;" th:text="${comment.content}"></div>
@@ -26,7 +38,24 @@
 						<span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
 					</div>
 					<div th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
+					<div th:if="${comment.modifiedDate != null}">
+						<div class="mb-2">modified at</div>
+						<div th:text="${#temporals.format(comment.modifiedDate, 'yyyy-MM-dd HH:mm')}"></div>
+					</div>
 				</div>
+			</div>
+			<div class="my-3">
+				<!-- 수정 -->
+				<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary"
+					sec:authorize="isAuthenticated()"
+					th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+					th:text="수정"></a>
+				<!-- 삭제 -->
+				<a href="javascript:void(0);" th:data-uri="@{|/comment/delete/${comment.id}|}"
+					class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+					th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+					th:text="삭제"></a>
+				<input type="hidden" th:value="${responseDTO.id}">
 			</div>
 		</div>
 	</div>
@@ -44,5 +73,17 @@
 		<input type="submit" value="댓글" class="btn btn-dark my-2">
 	</form>
 </div>
+
+<!--js-->
+<script layout:fragment="script" type='text/javascript'>
+	const delete_elements = document.getElementsByClassName("delete");
+	Array.from(delete_elements).forEach(function (element) {
+		element.addEventListener('click', function () {
+			if (confirm("정말로 삭제하시겠습니까?")) {
+				location.href = this.dataset.uri;
+			};
+		});
+	});
+</script>
 
 </html>
