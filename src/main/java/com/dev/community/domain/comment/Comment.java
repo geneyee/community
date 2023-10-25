@@ -1,16 +1,13 @@
 package com.dev.community.domain.comment;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
-import com.dev.community.web.dto.comment.request.CommentUpdateRequestDTO;
-import com.dev.community.web.dto.posts.request.PostsUpdateRequestDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,13 +16,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -53,13 +53,11 @@ public class Comment {
 
 	@LastModifiedDate
 	private LocalDateTime modifiedDate;
+	
+	@ManyToMany
+	Set<Users> voter;
 
-	@Override
-	public String toString() {
-		return "Comment [id=" + id + ", content=" + content + ", posts=" + posts + ", author=" + author
-				+ ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate + "]";
-	}
-
+	
 	// update
 	public void update(String content) {
 		if (content != null) {

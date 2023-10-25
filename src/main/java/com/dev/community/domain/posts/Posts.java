@@ -3,6 +3,7 @@ package com.dev.community.domain.posts;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -19,6 +20,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
@@ -61,6 +63,9 @@ public class Posts {
 	
 	@LastModifiedDate
 	private LocalDateTime modifiedDate;
+	
+	@ManyToMany
+	Set<Users> voter;
 
 	
 	// update method

@@ -33,37 +33,36 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/posts")
 @Controller
 public class PostsController {
-	
+
 	private final PostsService postsService;
 	private final UserService userService;
-	
+
 	// 전체 조회 화면(index 화면)
 	@GetMapping("/list")
 	public String index(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-		
+
 		Page<Posts> paging = this.postsService.findAllDesc(page);
 		model.addAttribute("paging", paging);
-		
+
 		return "post/index";
 	}
-	
+
 	// 글쓰기 화면
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/create")
 	public String create(Model model) {
-		
+
 		model.addAttribute("postCreateRequestDTO", new PostCreateRequestDTO());
-		
+
 		return "post/posts_form";
 	}
-	
+
 	// 글쓰기 기능
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create")
-	public String save(@Valid PostCreateRequestDTO createRequestDTO, BindingResult bindingResult,
-			Principal principal) {
-		
-		if(bindingResult.hasErrors()) {
+	public String save(@Valid PostCreateRequestDTO createRequestDTO, BindingResult bindingResult, Principal principal) {
+
+		if (bindingResult.hasErrors()) {
 			return "post/posts_form";
 		}
 		Users user = this.userService.getUser(principal.getName());
@@ -71,65 +70,92 @@ public class PostsController {
 
 		log.info("principal.getName() => {}", principal.getName());
 		log.info("user => ", user.toString());
-		
+
 		return "redirect:/posts/list";
 	}
-	
+
 	// 글 1개 조회 화면 // 댓글 추가
 	@GetMapping("/{id}")
 	public String read(@PathVariable Integer id, Model model, CommentCreateRequestDTO requestDTO) {
-		
+
 		PostsResponseDTO responseDTO = this.postsService.findById(id);
-		
+
 		model.addAttribute("responseDTO", responseDTO);
 		model.addAttribute("createRequestDTO", requestDTO);
-		
+
 		return "post/read";
 	}
-	
+
 	// 수정하기 화면
 	@GetMapping("/modify/{id}")
-	public String modify(@PathVariable Integer id, Principal principal, Model model, PostsUpdateRequestDTO postUpdateRequestDTO) {
-		
+	public String modify(@PathVariable Integer id, Principal principal, Model model,
+			PostsUpdateRequestDTO postUpdateRequestDTO) {
+
 		PostsResponseDTO responseDTO = this.postsService.findById(id);
-		
-		if(!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
+
+		if (!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
-		
+
 		postUpdateRequestDTO.toForm(responseDTO.getTitle(), responseDTO.getContent());
-		
+
 		model.addAttribute("postUpdateRequestDTO", postUpdateRequestDTO);
-		
+
 		return "post/update_form";
 	}
-	
+
 	// 수정하기
 	@PostMapping("/modify/{id}")
-	public String modify(@PathVariable Integer id, Principal principal, @Valid PostsUpdateRequestDTO postsUpdateRequestDTO, BindingResult bindingResult) {
-		
-		if(bindingResult.hasErrors()) {
+	public String modify(@PathVariable Integer id, Principal principal,
+			@Valid PostsUpdateRequestDTO postsUpdateRequestDTO, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
 			return "post/update_form";
 		}
-		
+
 		PostsUpdateRequestDTO dto = this.postsService.modify(id, postsUpdateRequestDTO, principal);
-		
-		return "redirect:/posts/"+dto.getId();
+
+		return "redirect:/posts/" + dto.getId();
 	}
-	
+
 	// 삭제하기
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete/{id}")
 	public String delete(Principal principal, @PathVariable Integer id) {
-		
+
 		PostsResponseDTO responseDTO = this.postsService.findById(id);
-		
-		if(!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
+
+		if (!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
 		}
-		
+
 		this.postsService.delete(responseDTO);
-		
+
 		return "redirect:/posts/list";
+	}
+
+	// 추천 - error : Found shared references to a collection ~
+//	@PreAuthorize("isAuthenticated()")
+//	@GetMapping("/vote/{id}")
+//	public String vote(@PathVariable Integer id, Principal principal) {
+//		
+//		PostsResponseDTO responseDTO = this.postsService.findById(id);
+//		Users user = this.userService.getUser(principal.getName());
+//		
+//		this.postsService.vote(responseDTO, user);
+//		
+//		return String.format("redirect:/posts/%s", id);
+//	}
+	
+	// 추천
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/vote/{id}")
+	public String vote(@PathVariable Integer id, Principal principal) {
+		Posts posts = this.postsService.getPost(id);
+		Users user = this.userService.getUser(principal.getName());
+		
+		this.postsService.vote(posts, user);
+		
+		return String.format("redirect:/posts/%s", id);
 	}
 }

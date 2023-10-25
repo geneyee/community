@@ -72,6 +72,11 @@ public class PostsService {
 		// entity to dto
 		return PostsResponseDTO.PostsFactory(entity);
 	}
+	
+	// findById -> entity로 받기
+	public Posts getPost(Integer id) {
+		return this.postsRepository.findById(id).orElseThrow();
+	}
 
 	@PreAuthorize("isAuthenticated()")
 	public PostsUpdateRequestDTO modify(Integer id, PostsUpdateRequestDTO dto, Principal principal) {
@@ -109,5 +114,26 @@ public class PostsService {
 		Posts posts = responseDTO.toEntity();
 		this.postsRepository.delete(posts);
 	}
+
+	public void vote(Posts posts, Users user) {
+		// TODO 추천
+		posts.getVoter().add(user);
+		this.postsRepository.save(posts);
+	}
+	
+	// 추천 - error : Found shared references to a collection ~
+//	public void vote(PostsResponseDTO responseDTO, Users user) {
+//		
+//		posts.getVoter().add(user);
+//		// getter대신 method..
+//		responseDTO.toVote(user);
+//		
+//		// dto to entity
+//		Posts entity = responseDTO.voteToEntity();
+//		
+//		this.postsRepository.save(entity);
+//	}
+
+	
 
 }

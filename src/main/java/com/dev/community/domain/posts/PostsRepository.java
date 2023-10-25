@@ -16,5 +16,6 @@ public interface PostsRepository extends JpaRepository<Posts, Integer> {
 	// 전체 리스트(id DESC)
 	@Query("SELECT p FROM Posts p ORDER BY p.id DESC")
 	Page<Posts> findAllDesc(Pageable pageable);
+	
 
 }

@@ -2,11 +2,11 @@ package com.dev.community.web.dto.posts.response;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
 import com.dev.community.web.dto.comment.response.CommentResponseDTO;
@@ -28,10 +28,12 @@ public class PostsResponseDTO {
 	
 	// 댓글 추가
 	private List<CommentResponseDTO> commentList = new ArrayList<>();
-
-	
+	 
 	// 작성자 추가
 	private Users author;
+	
+	// 추천 추가
+	private Set<Users> voter = new HashSet<>();
 	
 	// entity -> dto
 	public PostsResponseDTO(Posts entity) {
@@ -45,6 +47,9 @@ public class PostsResponseDTO {
 				.collect(Collectors.toList());
 		// 작성자
 		this.author = entity.getAuthor();
+		
+		// 추천
+		this.voter = entity.getVoter();
 			
 	}
 	
@@ -59,6 +64,16 @@ public class PostsResponseDTO {
 				.id(id)
 				.author(author)
 				.build();
+	}
+	
+	public Posts voteToEntity() {
+		return Posts.builder()
+				.voter(voter)
+				.build();
+	}
+
+	public void toVote(Users user) {
+		this.
 	}
 	
 
