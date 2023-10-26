@@ -75,9 +75,11 @@ public class PostsService {
 		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 		
-		Specification<Posts> spec = search(keyword);
+//		Specification<Posts> spec = search(keyword);
 		
-		return this.postsRepository.findAll(spec, pageable);
+//		return this.postsRepository.findAll(spec, pageable);
+		
+		return this.postsRepository.findAllByKeyword(keyword, pageable);
 		
 		// TODO 전체 리스트를 조회한다.
 //		List<Posts> postsList = this.postsRepository.findAllDesc();
