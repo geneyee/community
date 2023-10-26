@@ -73,7 +73,7 @@ public class PostsResponseDTO {
 	}
 
 	public void toVote(Users user) {
-		this.
+		this.getVoter().add(user);
 	}
 	
 

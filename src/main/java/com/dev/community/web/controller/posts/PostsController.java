@@ -39,10 +39,12 @@ public class PostsController {
 
 	// 전체 조회 화면(index 화면)
 	@GetMapping("/list")
-	public String index(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+	public String index(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "keyword", defaultValue = "")String keyword) {
 
-		Page<Posts> paging = this.postsService.findAllDesc(page);
+		Page<Posts> paging = this.postsService.findAllDesc(page, keyword);
 		model.addAttribute("paging", paging);
+		model.addAttribute("keyword", keyword);
 
 		return "post/index";
 	}

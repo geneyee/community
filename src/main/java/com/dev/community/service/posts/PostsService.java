@@ -1,17 +1,21 @@
 package com.dev.community.service.posts;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.posts.PostsRepository;
 import com.dev.community.domain.user.Users;
@@ -20,6 +24,12 @@ import com.dev.community.web.dto.posts.request.PostCreateRequestDTO;
 import com.dev.community.web.dto.posts.request.PostsUpdateRequestDTO;
 import com.dev.community.web.dto.posts.response.PostsResponseDTO;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +40,44 @@ import lombok.extern.slf4j.Slf4j;
 public class PostsService {
 	
 	private final PostsRepository postsRepository;
+	
+	
+	// 검색
+	private Specification<Posts> search(String keywords) {
+		return new Specification<Posts>() {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
-	public Page<Posts> findAllDesc(int page) {
+			@Override
+			public Predicate toPredicate(Root<Posts> p, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				// TODO 검색기능
+				query.distinct(true); // 중복 제거
+				Join<Posts, Users> u1 = p.join("author", JoinType.LEFT);
+				Join<Posts, Comment> c = p.join("commentList", JoinType.LEFT);
+				Join<Comment, Users> u2 = p.join("author", JoinType.LEFT);
+				
+				return criteriaBuilder.or(criteriaBuilder.like(p.get("title"), "%" + keywords + "%"), // 글 제목
+						criteriaBuilder.like(p.get("content"), "%" + keywords + "%"), //  글 본문
+						criteriaBuilder.like(u1.get("username"),  "%" + keywords + "%"), // 글 작성자
+						criteriaBuilder.like(c.get("content"),  "%" + keywords + "%"), // 댓글 본문
+						criteriaBuilder.like(u2.get("username"),  "%" + keywords + "%")); // 댓글 작성자
+			}
+		};
+	}
+	
+
+	public Page<Posts> findAllDesc(int page, String keyword) {
 		
-		Pageable pageable = PageRequest.of(page, 10);
-		return this.postsRepository.findAllDesc(pageable);
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.desc("id"));
+		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+		
+		Specification<Posts> spec = search(keyword);
+		
+		return this.postsRepository.findAll(spec, pageable);
 		
 		// TODO 전체 리스트를 조회한다.
 //		List<Posts> postsList = this.postsRepository.findAllDesc();
@@ -133,6 +176,7 @@ public class PostsService {
 //		
 //		this.postsRepository.save(entity);
 //	}
+	
 
 	
 
