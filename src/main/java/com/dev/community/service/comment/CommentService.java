@@ -39,8 +39,12 @@ public class CommentService {
 		// 넘어온 id로 댓글 저장할 글 조회
 		Posts posts = this.postsRepository.findById(id).orElseThrow();
 
-		Comment comment = Comment.builder().posts(posts).content(createRequestDTO.getContent()).author(user)
-				.createdDate(LocalDateTime.now()).build();
+		Comment comment = Comment.builder()
+				.posts(posts)
+				.content(createRequestDTO.getContent())
+				.author(user)
+				.createdDate(LocalDateTime.now())
+				.build();
 
 		log.info("user가 어떻게 저장되는지 확인 => {}", comment.toString());
 

@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,6 +25,7 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((authorizeHttpRequest) -> authorizeHttpRequest
 				.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
 				.csrf((csrf) -> csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))
+				.csrf(AbstractHttpConfigurer::disable)	// http.csrf().disable();
 				.headers((headers)-> headers
 						.addHeaderWriter(new XFrameOptionsHeaderWriter(
 								XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
@@ -34,6 +36,7 @@ public class SecurityConfig {
 						.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 						.logoutSuccessUrl("/posts/list")
 						.invalidateHttpSession(true));
+
 
 		return http.build();
 	}

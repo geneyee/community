@@ -66,6 +66,9 @@ public class Posts {
 	
 	@ManyToMany
 	Set<Users> voter;
+	
+	// 스크랩 수
+	private Integer scrapCount;
 
 	
 	// update method
