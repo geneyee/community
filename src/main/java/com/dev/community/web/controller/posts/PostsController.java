@@ -84,7 +84,7 @@ public class PostsController {
 
 		model.addAttribute("responseDTO", responseDTO);
 		model.addAttribute("createRequestDTO", requestDTO);
-
+		
 		return "post/read";
 	}
 

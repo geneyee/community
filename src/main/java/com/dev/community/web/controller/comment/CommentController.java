@@ -77,7 +77,8 @@ public class CommentController {
 		
 		CommentResponseDTO commentResponseDTO = this.commentService.findById(id);
 		
-		if(!commentResponseDTO.getAuthor().getUsername().equals(principal.getName())) {
+		if(!commentResponseDTO.getUserResponseDTO().getUsername().equals(principal.getName())) {
+//				.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 		
@@ -100,8 +101,8 @@ public class CommentController {
 		
 		CommentResponseDTO responseDTO = this.commentService.findById(id);
 		
-		
-		if(!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
+		if(!responseDTO.getUserResponseDTO().getUsername().equals(principal.getName())) {
+//		if(!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 		
@@ -129,7 +130,10 @@ public class CommentController {
 		CommentResponseDTO responseDTO = this.commentService.findById(id);
 		log.info("responseDTO => {}", responseDTO.toString());
 		
-		if(!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
+		
+//		if(!responseDTO.getAuthor().getUsername().equals(principal.getName())) {
+		if(!responseDTO.getUserResponseDTO().getUsername().equals(principal.getName())) {
+
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
 		}
 		

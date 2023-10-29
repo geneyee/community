@@ -41,7 +41,7 @@
 			<div class="d-flex justify-content-end">
 				<div class="badge bg-light text-dark p-2 text-start">
 					<div class="mb-2">
-						<span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
+						<span th:if="${comment.userResponseDTO != null}" th:text="${comment.userResponseDTO.username}"></span>
 					</div>
 					<div th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
 					<div th:if="${comment.modifiedDate != null}">
@@ -54,12 +54,12 @@
 				<!-- 수정 -->
 				<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary"
 					sec:authorize="isAuthenticated()"
-					th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+					th:if="${comment.userResponseDTO != null and #authentication.getPrincipal().getUsername() == comment.userResponseDTO.username}"
 					th:text="수정"></a>
 				<!-- 삭제 -->
 				<a href="javascript:void(0);" th:data-uri="@{|/comment/delete/${comment.id}|}"
 					class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
-					th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+					th:if="${comment.userResponseDTO != null and #authentication.getPrincipal().getUsername() == comment.userResponseDTO.username}"
 					th:text="삭제"></a>
 				<input type="hidden" th:value="${responseDTO.id}">
 			</div>

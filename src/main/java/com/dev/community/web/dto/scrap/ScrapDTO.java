@@ -1,8 +1,5 @@
 package com.dev.community.web.dto.scrap;
 
-import java.time.LocalDate;
-
-import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.scrap.Scrap;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

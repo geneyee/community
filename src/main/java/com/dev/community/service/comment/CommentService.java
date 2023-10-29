@@ -1,8 +1,11 @@
 package com.dev.community.service.comment;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -37,7 +40,7 @@ public class CommentService {
 		log.info("comment controller to service user => {}", user);
 		// TODO 댓글을 저장한다.
 		// 넘어온 id로 댓글 저장할 글 조회
-		Posts posts = this.postsRepository.findById(id).orElseThrow();
+		Posts posts = this.postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 생성 실패! 대상 게시글이 없습니다."));
 
 		Comment comment = Comment.builder()
 				.posts(posts)
@@ -111,6 +114,15 @@ public class CommentService {
 		
 		// delete
 		this.commentRepository.delete(entity);
+	}
+
+	// Rest API
+	public List<CommentResponseDTO> commentList(Integer postsId) {
+		// TODO 댓글 리스트 조회
+		
+		return this.commentRepository.findByPostsId(postsId).stream()
+				.map(comment -> CommentResponseDTO.CommentFactory(comment))
+				.collect(Collectors.toList());
 	}
 
 	/*

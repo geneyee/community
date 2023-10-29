@@ -3,6 +3,7 @@ package com.dev.community.web.dto.comment.request;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.user.Users;
@@ -20,6 +21,7 @@ public class CommentCreateRequestDTO {
 	private Integer id;
 	private Integer postsId;
 	private Users author;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private LocalDateTime createdDate;
 	
 	@NotEmpty(message = "내용은 필수항목입니다.")

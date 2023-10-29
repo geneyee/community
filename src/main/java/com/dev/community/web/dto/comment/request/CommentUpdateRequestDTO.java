@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
+import com.dev.community.web.dto.user.UserResponseDTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,8 @@ public class CommentUpdateRequestDTO {
 
 	private Integer id;
 	private Integer postsId;
-	private Users author;
+//	private Users author;
+	private UserResponseDTO userResponseDTO;
 	private LocalDateTime modifiedDate;
 
 	@NotEmpty(message = "내용은 필수항목입니다.")
@@ -33,7 +35,9 @@ public class CommentUpdateRequestDTO {
 
 	// dto to entity
 	public Comment toEntity() {
-		return Comment.builder().content(content).modifiedDate(LocalDateTime.now()).build();
+		return Comment.builder()
+				.content(content)
+				.modifiedDate(LocalDateTime.now()).build();
 	}
 
 	// entity to dto
@@ -54,17 +58,17 @@ public class CommentUpdateRequestDTO {
 		return new CommentUpdateRequestDTO(
 				entity.getId(), 
 				entity.getPosts().getId(), 
-				entity.getAuthor(),
+				UserResponseDTO.of(entity.getAuthor()),
 				entity.getContent(), 
 				entity.getModifiedDate());
 	}
 
 	// @AllArgsConstructor
-	public CommentUpdateRequestDTO(Integer id, Integer postsId, Users author, String content, LocalDateTime modifiedDate) {
+	public CommentUpdateRequestDTO(Integer id, Integer postsId, UserResponseDTO userResponseDTO, String content, LocalDateTime modifiedDate) {
 		super();
 		this.id = id;
 		this.postsId = postsId;
-		this.author = author;
+		this.userResponseDTO = userResponseDTO;
 		this.modifiedDate = modifiedDate;
 		this.content = content;
 	}
