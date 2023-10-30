@@ -179,6 +179,11 @@ public class PostsService {
 //		this.postsRepository.save(entity);
 //	}
 	
+	// 조회수
+	public Integer updateView(Integer id) {
+		return this.postsRepository.updateViewCount(id);
+	}
+	
 
 	
 

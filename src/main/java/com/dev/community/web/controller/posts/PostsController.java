@@ -81,6 +81,7 @@ public class PostsController {
 	public String read(@PathVariable Integer id, Model model, CommentCreateRequestDTO requestDTO) {
 
 		PostsResponseDTO responseDTO = this.postsService.findById(id);
+		this.postsService.updateView(id); // viewCount++
 
 		model.addAttribute("responseDTO", responseDTO);
 		model.addAttribute("createRequestDTO", requestDTO);

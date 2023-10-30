@@ -7,6 +7,7 @@ import com.dev.community.domain.user.Users;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class PostCreateRequestDTO {
 
@@ -28,6 +30,7 @@ public class PostCreateRequestDTO {
 	private String content;
 	
 	private Users author;
+	private Integer viewCount = 0;
 	
 //	@Builder // 빌더 쓰면 null... 왜그럴까ㅠ 
 //	public PostCreateRequestDTO(String title, String content) {
@@ -43,6 +46,7 @@ public class PostCreateRequestDTO {
 				.content(content)
 				.createdDate(LocalDateTime.now())
 				.author(author)
+				.viewCount(viewCount)
 				.build();
 	}
 	

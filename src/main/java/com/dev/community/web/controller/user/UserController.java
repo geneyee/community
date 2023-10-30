@@ -1,7 +1,9 @@
 package com.dev.community.web.controller.user;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.dev.community.service.user.UserService;
 import com.dev.community.web.dto.user.UserCreateDTO;
+
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +52,8 @@ public class UserController {
 			bindingResult.reject("signupFailed", e.getMessage());
 			return "user/signup_form";
 		}
+		
+		
 		return "redirect:/posts/list";
 	}
 	

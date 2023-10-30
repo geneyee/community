@@ -35,14 +35,18 @@ public class UserService {
 		return user;
 	}
 
-	public void create(UserCreateDTO userCreateDTO) {
+	public Users create(UserCreateDTO userCreateDTO) {
+//		public void create(UserCreateDTO userCreateDTO) {
 		// TODO 회원가입을 한다. DTO로 넘겨받음
 		Users user = Users.builder()
 				.username(userCreateDTO.getUsername())
 				.password(passwordEncoder.encode(userCreateDTO.getPassword1()))
 				.email(userCreateDTO.getEmail())
 				.build();
-		this.userRepository.save(user);
+		
+		Users entity = this.userRepository.save(user);
+		
+		return entity;
 	}
 	
 	public Users getUser(String username) {

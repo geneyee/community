@@ -3,11 +3,14 @@ package com.dev.community.web.dto.user;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@NoArgsConstructor
 public class UserCreateDTO {
 
 	@Size(min = 2, max = 25)
@@ -23,4 +26,14 @@ public class UserCreateDTO {
 	@NotEmpty(message = "이메일은 필수항목입니다.")
 	@Email
 	private String email;
+
+	@Builder
+	public UserCreateDTO(String username, String password1, String password2, String email) {
+		this.username = username;
+		this.password1 = password1;
+		this.password2 = password2;
+		this.email = email;
+	}
+	
+	
 }

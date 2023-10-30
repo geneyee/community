@@ -35,6 +35,9 @@ public class PostsResponseDTO {
 	// 추천 추가
 	private Set<Users> voter = new HashSet<>();
 	
+	// 조회수
+	private Integer viewCount;
+	
 	// entity -> dto
 	public PostsResponseDTO(Posts entity) {
 		this.id = entity.getId();
@@ -50,6 +53,8 @@ public class PostsResponseDTO {
 		
 		// 추천
 		this.voter = entity.getVoter();
+		
+		this.viewCount = entity.getViewCount();
 			
 	}
 	

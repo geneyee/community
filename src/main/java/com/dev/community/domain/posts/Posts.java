@@ -67,6 +67,10 @@ public class Posts {
 	@ManyToMany
 	Set<Users> voter;
 	
+	// 조회수
+	@Column(columnDefinition = "integer default 0")
+	private Integer viewCount;
+	
 	// 스크랩 수
 	private Integer scrapCount;
 
@@ -88,6 +92,5 @@ public class Posts {
 		this.id = entity.id;
 		this.author = entity.author;
 	}
-
-
+	
 }
