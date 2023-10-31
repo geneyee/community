@@ -9,11 +9,15 @@ import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.user.Users;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Setter
 @Getter
 public class CommentCreateRequestDTO {

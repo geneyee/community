@@ -68,7 +68,7 @@ public class CommentService {
 			// entity to dto
 			return CommentResponseDTO.CommentFactory(entity.get());
 		} else {
-			throw new DataNotFoundException("commet not found");
+			throw new DataNotFoundException("comment not found");
 		}
 	}
 
@@ -106,7 +106,7 @@ public class CommentService {
 		return CommentUpdateRequestDTO.CommentFactory(updated);
 	}
 
-	public void delete(CommentResponseDTO responseDTO) {
+	public Boolean delete(CommentResponseDTO responseDTO) {
 		log.info("id => {}", responseDTO.getId());
 		// TODO 삭제하기
 		// dto to entity
@@ -114,6 +114,8 @@ public class CommentService {
 		
 		// delete
 		this.commentRepository.delete(entity);
+		
+		return true;
 	}
 
 	// Rest API
