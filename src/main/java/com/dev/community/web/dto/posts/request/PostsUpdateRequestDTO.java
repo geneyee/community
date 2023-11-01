@@ -6,10 +6,14 @@ import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
+@AllArgsConstructor
 @Setter
 @NoArgsConstructor
 @Getter
@@ -22,6 +26,7 @@ public class PostsUpdateRequestDTO {
 	private String content;
 	private Users author;
 	private LocalDateTime modifiedDate;
+	private Integer viewCount;
 	
 	// GetMapping에서 수정화면에 기존 정보 넘겨주는 메소드
 	public PostsUpdateRequestDTO toForm(String title, String content) {
@@ -35,6 +40,7 @@ public class PostsUpdateRequestDTO {
 		return Posts.builder()
 				.title(title)
 				.content(content)
+				.viewCount(viewCount)
 				.build();
 	}
 
@@ -45,6 +51,7 @@ public class PostsUpdateRequestDTO {
 		this.content = entity.getContent();
 		this.modifiedDate = entity.getModifiedDate();
 		this.author = entity.getAuthor();
+		this.viewCount = entity.getViewCount();
 	}
 	
 	public static PostsUpdateRequestDTO PostsFactory(Posts entity) {

@@ -68,7 +68,7 @@ public class PostsController {
 			return "post/posts_form";
 		}
 		Users user = this.userService.getUser(principal.getName());
-		Integer id = this.postsService.save(createRequestDTO, user);
+		Posts post = this.postsService.save(createRequestDTO, user);
 
 		log.info("principal.getName() => {}", principal.getName());
 		log.info("user => ", user.toString());

@@ -87,7 +87,7 @@ public class PostsService {
 //		return postsList;
 	}
 
-	public Integer save(PostCreateRequestDTO createRequestDTO, Users user) {
+	public Posts save(PostCreateRequestDTO createRequestDTO, Users user) {
 		// TODO 글을 저장한다.
 		
 		log.info("controller에서 넘어온 값 : {}", createRequestDTO.toString());
@@ -105,7 +105,7 @@ public class PostsService {
 		 Posts saved = this.postsRepository.save(posts);
 		 log.info("entity DB에 저장 : {}", saved.toString());
 		
-		return saved.getId();
+		return saved;
 	}
 
 	public PostsResponseDTO findById(Integer id) throws NoSuchElementException {
@@ -155,9 +155,10 @@ public class PostsService {
 	}
 	
 	// 삭제
-	public void delete(PostsResponseDTO responseDTO) {
+	public Boolean delete(PostsResponseDTO responseDTO) {
 		Posts posts = responseDTO.toEntity();
 		this.postsRepository.delete(posts);
+		return true;
 	}
 
 	public void vote(Posts posts, Users user) {

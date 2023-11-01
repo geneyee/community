@@ -112,7 +112,6 @@ public class CommentServiceTest {
 	void delete() {
 		Integer id = 46;
 		CommentResponseDTO responseDTO = this.commentService.findById(id);
-		log.info("dto update => {}", responseDTO.getContent());
 		
 		Boolean result = this.commentService.delete(responseDTO);
 		

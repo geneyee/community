@@ -6,10 +6,14 @@ import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.user.Users;
 import com.dev.community.web.dto.user.UserResponseDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@Builder
 @Getter
 @NoArgsConstructor
 public class CommentResponseDTO {

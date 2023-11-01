@@ -46,4 +46,7 @@ public interface PostsRepository extends JpaRepository<Posts, Integer> {
 	@Modifying
 	@Query("UPDATE Posts p SET p.viewCount = p.viewCount + 1 WHERE p.id = :id")
 	Integer updateViewCount(@Param("id") Integer id);
+	
+	// 
+//	@Query()
 }

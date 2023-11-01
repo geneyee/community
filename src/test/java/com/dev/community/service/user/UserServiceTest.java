@@ -17,8 +17,8 @@ import com.dev.community.domain.user.UserRepository;
 import com.dev.community.domain.user.Users;
 import com.dev.community.web.dto.user.UserCreateDTO;
 
-//@ExtendWith(MockitoExtension.class)
-//@AutoConfigureMockMvc
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
 public class UserServiceTest {
 	
