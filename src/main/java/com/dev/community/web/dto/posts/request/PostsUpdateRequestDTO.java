@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import lombok.Setter;
 public class PostsUpdateRequestDTO {
 	
 	private Integer id;
-	@NotEmpty(message = "제목을 입력하세요.")
+	@NotBlank(message = "제목을 입력하세요.")
 	private String title;
 	@NotEmpty(message = "내용을 입력하세요.")
 	private String content;

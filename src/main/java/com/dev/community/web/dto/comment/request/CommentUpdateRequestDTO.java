@@ -7,6 +7,7 @@ import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
 import com.dev.community.web.dto.user.UserResponseDTO;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

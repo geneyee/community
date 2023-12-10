@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.user.Users;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

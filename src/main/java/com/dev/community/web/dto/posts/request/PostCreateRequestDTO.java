@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ import lombok.ToString;
 public class PostCreateRequestDTO {
 
 	// 글 저장 DTO
-	@NotEmpty(message = "제목은 필수사항입니다.")
+	@NotBlank(message = "제목은 필수사항입니다.")
 	@Size(max = 200)
 	private String title;
 	
