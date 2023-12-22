@@ -1,11 +1,9 @@
 <html layout:decorate="~{common/layout/layout}">
 <div layout:fragment="content" class="container">
-	<h5 class="my-3 border-bottom pb-2">글쓰기</h5>
-	<form th:action="@{|/posts/modify/${postUpdateRequestDTO.id}|}" th:object="${postUpdateRequestDTO}" method="post">
+	<h5 class="my-3 border-bottom pb-2">수정하기</h5>
+	<form th:action="@{|/posts/modify/${postsUpdateRequestDTO.id}|}" th:object="${postsUpdateRequestDTO}" method="post">
+		<!--<input type="hidden" name="id" th:value="${id}">-->
 		<div th:replace="~{common/fragments/form_errors :: formErrorsFragment}"></div>
-		<!--<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-			<div th:each="error : ${#fields.allErrors()}" th:text="${error}"></div>
-		</div>-->
 		<div class="mb-3">
 			<label for="title" class="form-label">제목</label>
 			<input type="text" class="form-control" th:field="*{title}">

@@ -23,7 +23,6 @@ public interface PostsRepository extends JpaRepository<Posts, Integer> {
 	Page<Posts> findAllDesc(Pageable pageable);
 	
 	// 검색1
-
 	Page<Posts> findAll(Specification<Posts> spec, Pageable pageable);
 	
 	// 검색2

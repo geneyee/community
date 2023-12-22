@@ -92,7 +92,7 @@ public class PostsController {
 	// 수정하기 화면
 	@GetMapping("/modify/{id}")
 	public String modify(@PathVariable Integer id, Principal principal, Model model,
-			PostsUpdateRequestDTO postUpdateRequestDTO) {
+			PostsUpdateRequestDTO postsUpdateRequestDTO) {
 
 		PostsResponseDTO responseDTO = this.postsService.findById(id);
 
@@ -100,17 +100,17 @@ public class PostsController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 
-		postUpdateRequestDTO.toForm(responseDTO.getTitle(), responseDTO.getContent());
+		postsUpdateRequestDTO.toForm(responseDTO.getTitle(), responseDTO.getContent(), responseDTO.getId());
 
-		model.addAttribute("postUpdateRequestDTO", postUpdateRequestDTO);
+		model.addAttribute("postsUpdateRequestDTO", postsUpdateRequestDTO);
 
 		return "post/update_form";
 	}
 
 	// 수정하기
 	@PostMapping("/modify/{id}")
-	public String modify(@PathVariable Integer id, Principal principal,
-			@Valid PostsUpdateRequestDTO postsUpdateRequestDTO, BindingResult bindingResult) {
+	public String modify(@PathVariable("id") Integer id, Principal principal,
+			@Valid PostsUpdateRequestDTO postsUpdateRequestDTO, BindingResult bindingResult, Model model) {
 
 		if (bindingResult.hasErrors()) {
 			return "post/update_form";

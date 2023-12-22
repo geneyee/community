@@ -23,16 +23,19 @@ public class PostsUpdateRequestDTO {
 	private Integer id;
 	@NotBlank(message = "제목을 입력하세요.")
 	private String title;
+	
 	@NotEmpty(message = "내용을 입력하세요.")
 	private String content;
+	
 	private Users author;
 	private LocalDateTime modifiedDate;
 	private Integer viewCount;
 	
 	// GetMapping에서 수정화면에 기존 정보 넘겨주는 메소드
-	public PostsUpdateRequestDTO toForm(String title, String content) {
+	public PostsUpdateRequestDTO toForm(String title, String content, Integer id) {
 		this.title = title;
 		this.content = content;
+		this.id = id;
 		return this;
 	}
 

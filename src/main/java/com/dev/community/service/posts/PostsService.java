@@ -130,7 +130,7 @@ public class PostsService {
 		// TODO 글을 수정한다.
 		
 		// 1. url에 넘어온 id로 posts 데이터 찾기
-		Posts target = this.postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 수정 실패! 대상 댓글이 없습니다."));
+		Posts target = this.postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("수정 실패! 대상 게시글이 없습니다."));
 		
 		// 2. 데이터가 없다면 예외 발생
 //		if(target == null || id != target.getId()) {
