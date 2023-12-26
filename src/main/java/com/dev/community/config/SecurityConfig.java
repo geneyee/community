@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -37,7 +38,6 @@ public class SecurityConfig {
 						.logoutSuccessUrl("/posts/list")
 						.invalidateHttpSession(true));
 
-
 		return http.build();
 	}
 	
@@ -46,6 +46,7 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
+	// UserSecurityService(implements UserDetailsService), PasswordEncoder 사용해서 인증
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
