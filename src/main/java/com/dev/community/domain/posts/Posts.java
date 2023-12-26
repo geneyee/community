@@ -68,7 +68,7 @@ public class Posts {
 	Set<Users> voter;
 	
 	// 조회수
-	@Column(columnDefinition = "integer default 0")
+	@Column(columnDefinition = "integer default 0", nullable = false)
 	private Integer viewCount;
 	
 	// 스크랩 수

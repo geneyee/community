@@ -30,6 +30,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,7 @@ public class PostsService {
 	
 	
 	// 검색
+	@Transactional
 	private Specification<Posts> search(String keywords) {
 		return new Specification<Posts>() {
 			
@@ -68,7 +70,7 @@ public class PostsService {
 		};
 	}
 	
-
+	@Transactional
 	public Page<Posts> findAllDesc(int page, String keyword) {
 		
 		List<Sort.Order> sorts = new ArrayList<>();
@@ -87,6 +89,7 @@ public class PostsService {
 //		return postsList;
 	}
 
+	@Transactional
 	public Posts save(PostCreateRequestDTO createRequestDTO, Users user) {
 		// TODO 글을 저장한다.
 		
@@ -108,6 +111,7 @@ public class PostsService {
 		return saved;
 	}
 
+	@Transactional
 	public PostsResponseDTO findById(Integer id) throws NoSuchElementException {
 		// TODO 글을 조회한다.
 		
@@ -123,6 +127,7 @@ public class PostsService {
 		return this.postsRepository.findById(id).orElseThrow();
 	}
 
+	@Transactional
 	@PreAuthorize("isAuthenticated()")
 	public PostsUpdateRequestDTO modify(Integer id, PostsUpdateRequestDTO dto, Principal principal) {
 		
@@ -155,12 +160,14 @@ public class PostsService {
 	}
 	
 	// 삭제
+	@Transactional
 	public Boolean delete(PostsResponseDTO responseDTO) {
 		Posts posts = responseDTO.toEntity();
 		this.postsRepository.delete(posts);
 		return true;
 	}
 
+	@Transactional
 	public void vote(Posts posts, Users user) {
 		// TODO 추천
 		posts.getVoter().add(user);
@@ -181,11 +188,28 @@ public class PostsService {
 //	}
 	
 	// 조회수
-	public Integer updateView(Integer id) {
-		return this.postsRepository.updateViewCount(id);
+	@Transactional
+	public PostsResponseDTO updateView(Integer id) {
+		log.info("Posts id => {}", id);
+		
+		// posts id로 조회
+		Optional<Posts> post = this.postsRepository.findById(id);
+		
+		// 해당 글 있으면
+		if(post.isPresent()) {
+			// 조회수 증가
+			this.postsRepository.updateViewCount(id);
+			
+			// entity to dto
+			PostsResponseDTO responseDTO = PostsResponseDTO.PostsFactory(post.get());
+			log.info("조회수 증가 DTO => {}", responseDTO.getViewCount());
+			return responseDTO;
+			
+		} else { 
+			// 없으면 id를 찾을 수 없다는 예외 발생
+			throw new DataNotFoundException("Posts not found by id : " + id);
+		}
 	}
-	
-
 	
 
 }

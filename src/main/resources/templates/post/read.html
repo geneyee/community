@@ -6,11 +6,13 @@
 		<div class="card my-3">
 			<div class="card-body">
 				<div clas="card-text" th:text="${responseDTO.content}"></div>
-				<div class="badge bg-light text-dark p-2 text-start">
-					<div class="mb-2">
-						<span th:if="${responseDTO.author != null}" th:text="${responseDTO.author.username}"></span>
+				<div class="d-flex justify-content-end">
+					<div class="badge bg-light text-dark p-2">
+						<div class="mb-2">
+							<span th:if="${responseDTO.author != null}" th:text="${responseDTO.author.username}"></span>
+						</div>
+						<div th:text="${#temporals.format(responseDTO.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
 					</div>
-					<div th:text="${#temporals.format(responseDTO.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
 				</div>
 			</div>
 			<div class="my-3">

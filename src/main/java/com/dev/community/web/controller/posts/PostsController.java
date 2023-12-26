@@ -24,6 +24,9 @@ import com.dev.community.web.dto.posts.request.PostCreateRequestDTO;
 import com.dev.community.web.dto.posts.request.PostsUpdateRequestDTO;
 import com.dev.community.web.dto.posts.response.PostsResponseDTO;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,13 +79,14 @@ public class PostsController {
 		return "redirect:/posts/list";
 	}
 
-	// 글 1개 조회 화면 // 댓글 추가
+	// 글 1개 조회 화면 // 댓글 추가 // 조회수
 	@GetMapping("/{id}")
-	public String read(@PathVariable Integer id, Model model, CommentCreateRequestDTO requestDTO) {
+	public String read(@PathVariable Integer id, Model model, CommentCreateRequestDTO requestDTO, HttpServletRequest request, HttpServletResponse response) {
 
+		// viewCount++
+		viewCount(id, request, response);
+		//this.postsService.updateView(id); 
 		PostsResponseDTO responseDTO = this.postsService.findById(id);
-		this.postsService.updateView(id); // viewCount++
-
 		model.addAttribute("responseDTO", responseDTO);
 		model.addAttribute("createRequestDTO", requestDTO);
 		
@@ -160,5 +164,43 @@ public class PostsController {
 		this.postsService.vote(posts, user);
 		
 		return String.format("redirect:/posts/%s", id);
+	}
+	
+	// 조회수 증가
+	private void viewCount(Integer id, HttpServletRequest request, HttpServletResponse response) {
+		// 쿠키 저장(name, value) -> viewPosts, [id]
+		
+		// 조회수 증가 쿠키 name
+		final String COOKIE_NAME = "viewPosts";
+		
+		// 조회수 증가 완료
+		Cookie viewedPostsCookie = null;
+		
+		// 쿠키를 조회해서 있으면 이름이 viewPosts인지 확인해서 맞다면 이미 조회수 증가 한 게시글이다. 
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				if(COOKIE_NAME.equals(cookie.getName())) {
+					viewedPostsCookie = cookie;
+				}
+			}
+		}
+		
+		// 조회수 증가 쿠키가 있다면 
+		if(viewedPostsCookie != null) {
+			if(!viewedPostsCookie.getValue().contains("["+ id + "]")) { // value에서 게시글 id를 조회해서 없다면 조회수 증가
+				this.postsService.updateView(id); // 조회수 증가
+				viewedPostsCookie.setValue(viewedPostsCookie.getValue() + "[" + id + "]"); // 조회수 증가 된 쿠키에 게시글 id를 추가
+				viewedPostsCookie.setPath("/"); // 쿠키 유효 경로를 사이트 전체로 설정
+				viewedPostsCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효 시간을 24시간으로 설정
+				response.addCookie(viewedPostsCookie); // 쿠키 저장
+			}
+		} else { // 쿠키가 없다면 조회수 증가 쿠키를 생성해서 저장
+			this.postsService.updateView(id); // 조회수 증가
+			Cookie newCookie = new Cookie(COOKIE_NAME, "[" + id + "]");
+			newCookie.setPath("/");
+			newCookie.setMaxAge(60 * 60 * 24);
+			response.addCookie(newCookie);
+		}
 	}
 }
