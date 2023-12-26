@@ -71,7 +71,7 @@ public class PostsController {
 		Posts post = this.postsService.save(createRequestDTO, user);
 
 		log.info("principal.getName() => {}", principal.getName());
-		log.info("user => ", user.toString());
+		log.info("user => {}", user.toString());
 
 		return "redirect:/posts/list";
 	}
