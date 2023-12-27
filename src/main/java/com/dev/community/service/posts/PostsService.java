@@ -112,14 +112,18 @@ public class PostsService {
 	}
 
 	@Transactional
-	public PostsResponseDTO findById(Integer id) throws NoSuchElementException {
+	public PostsResponseDTO findById(Integer id) {
 		// TODO 글을 조회한다.
 		
 		// 넘어온 id로 조회 
-		Posts entity = this.postsRepository.findById(id).orElseThrow();
+		Optional<Posts> entity = this.postsRepository.findById(id);
 		
-		// entity to dto
-		return PostsResponseDTO.PostsFactory(entity);
+		if(entity.isPresent()) {
+			// entity to dto
+			return PostsResponseDTO.PostsFactory(entity.get());
+		} else {
+			throw new DataNotFoundException("Posts not found by id : " + id);
+		}
 	}
 	
 	// findById -> entity로 받기
