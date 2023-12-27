@@ -118,16 +118,23 @@ public class CommentService {
 		}
 	}
 
+	@Transactional
 	public Boolean delete(CommentResponseDTO responseDTO) {
 		log.info("id => {}", responseDTO.getId());
+	
 		// TODO 삭제하기
-		// dto to entity
-		Comment entity = responseDTO.toEntity();
+		Optional<Comment> comment = this.commentRepository.findById(responseDTO.getId());
 		
-		// delete
-		this.commentRepository.delete(entity);
-		
-		return true;
+		if(comment.isPresent()) {
+			// dto to entity
+			Comment entity = responseDTO.toEntity();
+			
+			// delete
+			this.commentRepository.delete(entity);
+			return true;
+		} else {
+			throw new DataNotFoundException("comment not found");
+		}
 	}
 
 	@Transactional
