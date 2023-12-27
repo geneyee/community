@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dev.community.domain.user.Users;
 import com.dev.community.service.comment.CommentService;
+import com.dev.community.service.posts.PostsService;
 import com.dev.community.service.user.UserService;
 import com.dev.community.web.dto.comment.request.CommentCreateRequestDTO;
 import com.dev.community.web.dto.comment.request.CommentUpdateRequestDTO;
@@ -36,38 +37,27 @@ public class CommentController {
 	
 	private final CommentService commentService;
 	private final UserService userService;
+	private final PostsService postsService;
 	
 	// 댓글 저장
-//	@PostMapping("/create/{id}") // id-post_id
-//	public String save(@PathVariable Integer id, @RequestParam String content) {
-//		
-//		CommentCreateRequestDTO requestDTO = this.commentService.save(id, content);
-//		
-//		return String.format("redirect:/posts/%s", id);
-//	}
-	
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create/{id}") // id-post_id
-	public String save(@PathVariable Integer id, Model model, PostsResponseDTO responseDTO, @Validated CommentCreateRequestDTO createRequestDTO, BindingResult bindingResult, 
-						RedirectAttributes rttr, Principal principal) {
-		
-		if(bindingResult.hasErrors()) {
-			
-			model.addAttribute("responseDTO", responseDTO);
-			model.addAttribute("createRequestDTO", createRequestDTO);
+	public String save(@PathVariable Integer id, @Valid CommentCreateRequestDTO createRequestDTO, BindingResult bindingResult, Principal principal, Model model) {
 
-			rttr.addFlashAttribute("msg", "댓글을 입력하세요.");
-			rttr.addFlashAttribute("alertClass", "alert-danger");
-			
-			return String.format("redirect:/posts/%s", responseDTO.getId()); //id  
-			
+		// posts id로 posts 조회
+		PostsResponseDTO postsResponseDTO = postsService.findById(id);
+
+		// 댓글 validation
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("responseDTO", postsResponseDTO);
+			return "redirect:/posts/" + id;
 		}
+//		
 		Users user = this.userService.getUser(principal.getName());
-		CommentCreateRequestDTO requestDTO = this.commentService.save(id, createRequestDTO, user);
+		this.commentService.save(id, createRequestDTO, user);
 		
-		return String.format("redirect:/posts/%s", requestDTO.getPostsId());
+		return String.format("redirect:/posts/%s", id);
 	}
-	
 	
 	// 수정 화면
 	@PreAuthorize("isAuthenticated()")

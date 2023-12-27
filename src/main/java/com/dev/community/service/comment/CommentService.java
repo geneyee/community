@@ -34,30 +34,33 @@ public class CommentService {
 	private final PostsRepository postsRepository;
 	private final CommentRepository commentRepository;
 
-	public CommentCreateRequestDTO save(Integer id, CommentCreateRequestDTO createRequestDTO, Users user)
-			throws NoSuchElementException {
+	public CommentCreateRequestDTO save(Integer id, CommentCreateRequestDTO createRequestDTO, Users user) {
 		log.info("comment controller to service id => {}", id);
 		log.info("comment controller to service user => {}", user);
+		
 		// TODO 댓글을 저장한다.
 		// 넘어온 id로 댓글 저장할 글 조회
-		Posts posts = this.postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 생성 실패! 대상 게시글이 없습니다."));
+		Optional<Posts> posts = this.postsRepository.findById(id);
 
-		Comment comment = Comment.builder()
-				.posts(posts)
-				.content(createRequestDTO.getContent())
-				.author(user)
-				.createdDate(LocalDateTime.now())
-				.build();
+		if (posts.isPresent()) {
+			Comment comment = Comment.builder()
+					.posts(posts.get())
+					.content(createRequestDTO.getContent())
+					.author(user)
+					.createdDate(LocalDateTime.now())
+					.build();
 
-		log.info("user가 어떻게 저장되는지 확인 => {}", comment.toString());
+			log.info("user가 어떻게 저장되는지 확인 => {}", comment.toString());
 
-		Comment entity = this.commentRepository.save(comment);
+			Comment entity = this.commentRepository.save(comment);
 
-		// entity to dto
-		CommentCreateRequestDTO requestDTO = CommentCreateRequestDTO.CommentFactory(entity);
-
-		return requestDTO;
-
+			// entity to dto
+			CommentCreateRequestDTO requestDTO = CommentCreateRequestDTO.CommentFactory(entity);
+			
+			return requestDTO;
+		} else {
+			throw new DataNotFoundException("posts not found" + id);
+		}
 	}
 
 	public CommentResponseDTO findById(Integer id) {
