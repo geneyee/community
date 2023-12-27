@@ -164,9 +164,16 @@ public class PostsService {
 	// 삭제
 	@Transactional
 	public Boolean delete(PostsResponseDTO responseDTO) {
-		Posts posts = responseDTO.toEntity();
-		this.postsRepository.delete(posts);
-		return true;
+		// TODO 글을 삭제한다.
+		Optional<Posts> posts = this.postsRepository.findById(responseDTO.getId());
+		
+		if(posts.isPresent()) {
+			Posts target = responseDTO.toEntity();
+			this.postsRepository.delete(target);
+			return true;
+		} else {
+			throw new DataNotFoundException("Posts not found by id : " + responseDTO.getId());
+		}
 	}
 
 	@Transactional
