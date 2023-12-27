@@ -26,7 +26,6 @@ public class CommentResponseDTO {
 //	private Users author;
 	private UserResponseDTO userResponseDTO;
 	
-	// 작성자 추가 - 안해주면 타임리프에서 게시글 조회할때 에러난다
 	private LocalDateTime createdDate;
 	
 	// 수정 날짜 표시

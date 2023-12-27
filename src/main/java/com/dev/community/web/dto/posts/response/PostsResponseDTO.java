@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.dev.community.domain.comment.Comment;
 import com.dev.community.domain.posts.Posts;
 import com.dev.community.domain.user.Users;
 import com.dev.community.web.dto.comment.response.CommentResponseDTO;
@@ -45,6 +46,7 @@ public class PostsResponseDTO {
 		this.content = entity.getContent();
 		this.createdDate = entity.getCreatedDate();
 		// 댓글
+//		this.commentList = entity.getCommentList();
 		this.commentList = entity.getCommentList().stream()
 				.map(comment -> CommentResponseDTO.CommentFactory(comment))
 				.collect(Collectors.toList());
