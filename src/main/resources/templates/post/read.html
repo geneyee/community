@@ -1,7 +1,7 @@
 <html layout:decorate="~{common/layout/layout}">
 <div layout:fragment="content" class="container my-3">
 	<!--게시글-->
-	<form th:action="@{|/posts/{responseDTO.id}|}">
+	<form th:action="@{|/posts/${responseDTO.id}|}">
 		<h4 class="border-bottom py-2" th:text="${responseDTO.title}"></h4>
 		<div class="card my-3">
 			<div class="card-body">
