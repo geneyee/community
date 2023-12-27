@@ -100,17 +100,22 @@ public class CommentService {
 	public CommentUpdateRequestDTO update(Integer id, CommentUpdateRequestDTO commentRequestDTO) {
 		
 		// id로 업데이트 할 댓글 찾음
-		Comment entity = this.commentRepository.findById(id).orElseThrow();
+		Optional<Comment> entity = this.commentRepository.findById(id);
 		
-		// 찾은 댓글 entity에 수정된 글 update
-		entity.update(commentRequestDTO.getContent());
-		
-		// 저장
-		Comment updated = this.commentRepository.save(entity);
-		log.info("entity 확인 => {}",entity.toString());
+		if(entity.isPresent()) {
+			Comment comment = entity.get();
+			// 찾은 댓글 entity에 수정된 글 update
+			comment.update(commentRequestDTO.getContent());
+			
+			// 저장
+			Comment updated = this.commentRepository.save(comment);
+			log.info("entity 확인 => {}",comment.toString());
 
-		// entity to dto
-		return CommentUpdateRequestDTO.CommentFactory(updated);
+			// entity to dto
+			return CommentUpdateRequestDTO.CommentFactory(updated);
+		} else {
+			throw new DataNotFoundException("comment not found");
+		}
 	}
 
 	public Boolean delete(CommentResponseDTO responseDTO) {
