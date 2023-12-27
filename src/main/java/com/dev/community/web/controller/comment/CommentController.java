@@ -42,7 +42,7 @@ public class CommentController {
 	// 댓글 저장
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create/{id}") // id-post_id
-	public String save(@PathVariable Integer id, @Valid CommentCreateRequestDTO createRequestDTO, BindingResult bindingResult, Principal principal, Model model) {
+	public String save(@PathVariable Integer id, @Valid CommentCreateRequestDTO requestDTO, BindingResult bindingResult, Principal principal, Model model) {
 
 		// posts id로 posts 조회
 		PostsResponseDTO postsResponseDTO = postsService.findById(id);
@@ -50,11 +50,11 @@ public class CommentController {
 		// 댓글 validation
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("responseDTO", postsResponseDTO);
-			return "redirect:/posts/" + id;
+			return "post/read";
 		}
-//		
+		
 		Users user = this.userService.getUser(principal.getName());
-		this.commentService.save(id, createRequestDTO, user);
+		this.commentService.save(id, requestDTO, user);
 		
 		return String.format("redirect:/posts/%s", id);
 	}

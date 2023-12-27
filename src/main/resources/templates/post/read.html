@@ -1,7 +1,7 @@
 <html layout:decorate="~{common/layout/layout}">
 <div layout:fragment="content" class="container my-3">
 	<!--게시글-->
-	<form th:action="@{|/posts/${responseDTO.id}|}">
+	<div th:action="@{|/posts/${responseDTO.id}|}">
 		<h4 class="border-bottom py-2" th:text="${responseDTO.title}"></h4>
 		<div class="card my-3">
 			<div class="card-body">
@@ -34,7 +34,7 @@
 					th:text="삭제"></a>
 			</div>
 		</div>
-	</form>
+	</div>
 	<!--댓글 표시-->
 	<h5 th:text="|${#lists.size(responseDTO.commentList)}개의 댓글이 있습니다.|"></h5>
 	<div class="card my-3" th:each="comment : ${responseDTO.commentList}">
@@ -68,13 +68,8 @@
 		</div>
 	</div>
 	<!--댓글 작성-->
-	<form th:action="@{|/comment/create/${responseDTO.id}|}" method="post" th:object="${createRequestDTO}">
-		<!--		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-			<div th:each="error : ${#fields.allErrors()}" th:text="${error}"></div>
-		</div>-->
-		<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">에러 발생</div>
-		<div th:if="${msg}" th:class="${'alert ' + alertClass}" th:text="${msg}"></div>
-		<!--<input type="hidden" th:field="*{}" />-->
+	<form th:action="@{|/comment/create/${responseDTO.id}|}" method="post" th:object="${commentCreateRequestDTO}">
+		<div th:replace="~{common/fragments/form_errors :: formErrorsFragment}"></div>
 		<textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" rows="10"
 			class="form-control"></textarea>
 		<textarea sec:authorize="isAuthenticated()" th:field="*{content}" rows="10" class="form-control"></textarea>
