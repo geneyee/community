@@ -3,6 +3,7 @@ package com.dev.community.domain.posts;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -80,12 +81,16 @@ public class Posts {
 		if(dto.getTitle() != null) {
 			this.title = dto.getTitle();
 		}
-		if(dto.getClass() !=null) {
+		if(dto.getContent() !=null) {
 			this.content = dto.getContent();
 		}
 		this.modifiedDate = LocalDateTime.now();
 		return this;
+//		Optional.ofNullable(dto.getTitle()).ifPresent(value -> this.title = value);
+//		Optional.ofNullable(dto.getContent()).ifPresent(value -> this.content = value);
+//		return this;
 	}
+
 	
 	// 삭제할 때 dto to entity 시 쓸 것
 	public Posts(Posts entity) {
