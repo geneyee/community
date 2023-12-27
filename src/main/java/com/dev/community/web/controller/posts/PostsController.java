@@ -55,9 +55,7 @@ public class PostsController {
 	// 글쓰기 화면
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/create")
-	public String create(Model model) {
-
-		model.addAttribute("postCreateRequestDTO", new PostCreateRequestDTO());
+	public String create(PostCreateRequestDTO postCreateRequestDTO) {
 
 		return "post/posts_form";
 	}
