@@ -22,6 +22,7 @@ import com.dev.community.web.dto.comment.request.CommentCreateRequestDTO;
 import com.dev.community.web.dto.comment.request.CommentUpdateRequestDTO;
 import com.dev.community.web.dto.comment.response.CommentResponseDTO;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class CommentService {
 	private final PostsRepository postsRepository;
 	private final CommentRepository commentRepository;
 
+	@Transactional
 	public CommentCreateRequestDTO save(Integer id, CommentCreateRequestDTO createRequestDTO, Users user) {
 		log.info("comment controller to service id => {}", id);
 		log.info("comment controller to service user => {}", user);
@@ -63,6 +65,7 @@ public class CommentService {
 		}
 	}
 
+	@Transactional
 	public CommentResponseDTO findById(Integer id) {
 		// TODO 댓글 id로 댓글 데이터 조회
 		Optional<Comment> entity = this.commentRepository.findById(id);
@@ -93,6 +96,7 @@ public class CommentService {
 //		return CommentUpdateRequestDTO.CommentFactory(updated);
 //	}
 
+	@Transactional
 	public CommentUpdateRequestDTO update(Integer id, CommentUpdateRequestDTO commentRequestDTO) {
 		
 		// id로 업데이트 할 댓글 찾음
@@ -121,6 +125,7 @@ public class CommentService {
 		return true;
 	}
 
+	@Transactional
 	// Rest API
 	public List<CommentResponseDTO> commentList(Integer postsId) {
 		// TODO 댓글 리스트 조회

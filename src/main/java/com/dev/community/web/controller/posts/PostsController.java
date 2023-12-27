@@ -86,7 +86,6 @@ public class PostsController {
 		//this.postsService.updateView(id); 
 		PostsResponseDTO responseDTO = this.postsService.findById(id);
 		model.addAttribute("responseDTO", responseDTO);
-		model.addAttribute("createRequestDTO", requestDTO);
 		
 		return "post/read";
 	}
