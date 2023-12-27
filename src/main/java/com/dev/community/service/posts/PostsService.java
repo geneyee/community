@@ -139,28 +139,32 @@ public class PostsService {
 		// TODO 글을 수정한다.
 		
 		// 1. url에 넘어온 id로 posts 데이터 찾기
-		Posts target = this.postsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("수정 실패! 대상 게시글이 없습니다."));
+		Optional<Posts> posts = this.postsRepository.findById(id);
 		
 		// 2. 데이터가 없다면 예외 발생
-//		if(target == null || id != target.getId()) {
-//			log.info("잘못된 요청! id => {}, post => {}", id, target.toString());
-//			throw new DataNotFoundException("User not found");
-//		} 
-		
-		// 3. 찾은 데이터의 작성자id와 로그인 한 아이디가 다르면 예외발생
-		if(!target.getAuthor().getUsername().equals(principal.getName())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+		if (posts.isEmpty()) {
+			log.info("잘못된 요청! id => {}, post => {}", id, posts.toString());
+			throw new DataNotFoundException("User not found");
+		} else {
+			// 데이터 있음
+			Posts target = posts.get();
+			
+			// 3. 찾은 데이터의 작성자id와 로그인 한 아이디가 다르면 예외발생
+			if(!target.getAuthor().getUsername().equals(principal.getName())) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+			}
+			
+			// 5. 업데이트
+			Posts entity = target.update(dto);
+			log.info("target.update(dto) => {}", entity.toString());
+			
+			Posts updated = this.postsRepository.save(entity);
+			log.info("entity save, 날짜 저장 확인 => {}", updated.toString());
+			
+			// entity to dto
+			return PostsUpdateRequestDTO.PostsFactory(updated);
 		}
-		
-		// 5. 업데이트
-		Posts entity = target.update(dto);
-		log.info("target.update(dto) => {}", entity.toString());
-		
-		Posts updated = this.postsRepository.save(entity);
-		log.info("entity save, 날짜 저장 확인 => {}", updated.toString());
-		
-		// entity to dto
-		return PostsUpdateRequestDTO.PostsFactory(updated);
+
 	}
 	
 	// 삭제
