@@ -2,6 +2,7 @@ package com.dev.community.web.controller;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dev.community.exception.DataNotFoundException;
@@ -13,6 +14,14 @@ public class GlobalExceptionHandler {
 	public ModelAndView handleDataNotFoundException(DataNotFoundException e) {
 		ModelAndView mav = new ModelAndView("error/data_not_found");
 		mav.addObject("message", "데이터를 찾을 수 없습니다.");
+		mav.addObject("location", "/");
+		return mav;
+	}
+	
+	@ExceptionHandler(ResponseStatusException.class)
+	public ModelAndView handleResponseStatusException(ResponseStatusException e) {
+		ModelAndView mav = new ModelAndView("error/data_not_found");
+		mav.addObject("message", "잘못된 접근입니다.");
 		mav.addObject("location", "/");
 		return mav;
 	}

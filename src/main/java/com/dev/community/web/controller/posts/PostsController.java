@@ -91,6 +91,7 @@ public class PostsController {
 	}
 
 	// 수정하기 화면
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{id}")
 	public String modify(@PathVariable Integer id, Principal principal, Model model,
 			PostsUpdateRequestDTO postsUpdateRequestDTO) {
@@ -109,6 +110,7 @@ public class PostsController {
 	}
 
 	// 수정하기
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/modify/{id}")
 	public String modify(@PathVariable("id") Integer id, Principal principal,
 			@Valid PostsUpdateRequestDTO postsUpdateRequestDTO, BindingResult bindingResult, Model model) {

@@ -132,7 +132,6 @@ public class PostsService {
 	}
 
 	@Transactional
-	@PreAuthorize("isAuthenticated()")
 	public PostsUpdateRequestDTO modify(Integer id, PostsUpdateRequestDTO dto, Principal principal) {
 		
 		log.info("id => {}", id);
@@ -148,11 +147,6 @@ public class PostsService {
 		} else {
 			// 데이터 있음
 			Posts target = posts.get();
-			
-			// 3. 찾은 데이터의 작성자id와 로그인 한 아이디가 다르면 예외발생
-			if(!target.getAuthor().getUsername().equals(principal.getName())) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-			}
 			
 			// 5. 업데이트
 			Posts entity = target.update(dto);
