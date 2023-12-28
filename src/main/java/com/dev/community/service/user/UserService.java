@@ -21,8 +21,6 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	
 	public Users create(String username, String email, String password) {
-		
-//		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		Users user = Users.builder()
 				.username(username)
@@ -36,7 +34,6 @@ public class UserService {
 	}
 
 	public Users create(UserCreateDTO userCreateDTO) {
-//		public void create(UserCreateDTO userCreateDTO) {
 		// TODO 회원가입을 한다. DTO로 넘겨받음
 		Users user = Users.builder()
 				.username(userCreateDTO.getUsername())

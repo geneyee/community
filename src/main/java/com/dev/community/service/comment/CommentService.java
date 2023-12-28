@@ -78,24 +78,6 @@ public class CommentService {
 		}
 	}
 
-//	public CommentUpdateRequestDTO modify(CommentUpdateRequestDTO commentRequestDTO) {
-//		// TODO 업데이트 한다.
-////		log.info("{}", responseDTO.getId());
-//		log.info("{}", commentRequestDTO.getId());
-//
-//		// 업데이트 dto (toForm() method 재사용)
-//		commentRequestDTO = commentRequestDTO.toForm(commentRequestDTO.getContent());
-//
-//		// dto to entity
-//		Comment entity = commentRequestDTO.toEntity();
-//
-//		// update
-//		Comment updated = this.commentRepository.save(entity);
-//
-//		// entity to dto
-//		return CommentUpdateRequestDTO.CommentFactory(updated);
-//	}
-
 	@Transactional
 	public CommentUpdateRequestDTO update(Integer id, CommentUpdateRequestDTO commentRequestDTO) {
 		
@@ -146,21 +128,4 @@ public class CommentService {
 				.map(comment -> CommentResponseDTO.CommentFactory(comment))
 				.collect(Collectors.toList());
 	}
-
-	/*
-	 * public CommentCreateRequestDTO save(Integer id, String content) throws
-	 * NoSuchElementException { // TODO 댓글을 저장한다.
-	 * 
-	 * // 넘어온 id로 댓글 저장할 글 조회 Posts posts =
-	 * this.postsRepository.findById(id).orElseThrow();
-	 * 
-	 * // 댓글 저장 Comment comment = Comment.builder() .posts(posts) .content(content)
-	 * .build();
-	 * 
-	 * Comment entity = this.commentRepository.save(comment);
-	 * 
-	 * // entity to dto CommentCreateRequestDTO requestDTO =
-	 * CommentCreateRequestDTO.CommentFactory(entity); return requestDTO; }
-	 */
-
 }

@@ -70,6 +70,7 @@ public class PostsService {
 		};
 	}
 	
+	// 전체 목록
 	@Transactional
 	public Page<Posts> findAllDesc(int page, String keyword) {
 		
@@ -77,16 +78,7 @@ public class PostsService {
 		sorts.add(Sort.Order.desc("id"));
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 		
-//		Specification<Posts> spec = search(keyword);
-		
-//		return this.postsRepository.findAll(spec, pageable);
-		
 		return this.postsRepository.findAllByKeyword(keyword, pageable);
-		
-		// TODO 전체 리스트를 조회한다.
-//		List<Posts> postsList = this.postsRepository.findAllDesc();
-//		
-//		return postsList;
 	}
 
 	@Transactional
@@ -182,19 +174,6 @@ public class PostsService {
 		posts.getVoter().add(user);
 		this.postsRepository.save(posts);
 	}
-	
-	// 추천 - error : Found shared references to a collection ~
-//	public void vote(PostsResponseDTO responseDTO, Users user) {
-//		
-//		posts.getVoter().add(user);
-//		// getter대신 method..
-//		responseDTO.toVote(user);
-//		
-//		// dto to entity
-//		Posts entity = responseDTO.voteToEntity();
-//		
-//		this.postsRepository.save(entity);
-//	}
 	
 	// 조회수
 	@Transactional
