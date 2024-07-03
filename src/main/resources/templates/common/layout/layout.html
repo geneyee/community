@@ -14,9 +14,9 @@
 
 <body>
 	<!--Header 영역-->
-	<header th:replace="/common/fragments/header :: HeaderFragment"></header>
+	<div th:replace="common/fragments/header :: HeaderFragment"></div>
 	<!-- 네비게이션바 -->
-	<nav th:replace="/common/fragments/navbar :: navbarFragment"></nav>
+	<div th:replace="common/fragments/navbar :: navbarFragment"></div>
 	<!-- 기본 템플릿 안에 삽입될 내용 Start -->
 	<th:block layout:fragment="content"></th:block>
 	<!-- 기본 템플릿 안에 삽입될 내용 End -->
@@ -26,7 +26,7 @@
 	<th:block layout:fragment="script"></th:block>
 	<!-- 자바스크립트 End -->
 	<!--Footer 영역-->
-	<footer th:replace="/common/fragments/footer :: footerFragment"></footer>
+	<div th:replace="common/fragments/footer :: footerFragment"></div>>
 </body>
 
 </html>
