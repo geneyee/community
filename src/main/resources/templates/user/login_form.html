@@ -15,6 +15,7 @@
 			<input type="password" name="password" id="password" class="form-control" />
 		</div>
 		<button type="submit" class="btn btn-dark">로그인</button>
+		<a th:href="@{'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=ee6040e075846f92eb3f15cbb2aabc0d&redirect_uri=http://localhost:8080/auth/kakao/callback'}"><img height="38.5px" th:src="@{/image/kakao_login_button.png}" /></a>
 	</form>
 </div>
 

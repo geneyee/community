@@ -56,5 +56,4 @@ public class UserService {
 			throw new DataNotFoundException("User not found");
 		}
 	}
-
 }

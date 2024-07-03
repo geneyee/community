@@ -30,9 +30,6 @@ public class Users {
 	@Column(unique = true)
 	private String email;
 	
-//	@Enumerated(EnumType.STRING)
-//	private Role role;
-	
 	@Builder
 	public Users(String username, String password, String email) {
 		this.username = username;
